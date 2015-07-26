@@ -8,6 +8,10 @@ var webpackConfig = {
     entry: {
         app: ["webpack/hot/dev-server", "./src/scripts/app.js"]
     },
+        contentBase: __dirname + "/frontend/build",
+        noInfo: false, //  --no-info option
+        hot: true,
+        inline: true,
     module: {
         loaders: [
             { 
@@ -40,6 +44,10 @@ gulp.task("webpack-dev-server", function(callback) {
     var compiler = webpack(webpackConfig);
     new WebpackDevServer(compiler, {
         // server and middleware options
+        contentBase: __dirname + "/frontend/build",
+        noInfo: false, //  --no-info option
+        hot: true,
+        inline: true
     }).listen(8080, "localhost", function(err) {
         if(err) throw new gutil.PluginError("webpack-dev-server", err);
         // Server listening
