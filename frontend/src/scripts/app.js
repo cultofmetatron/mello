@@ -1,15 +1,35 @@
 var React = require('react');
+var nav = require('./components/navigation/navigation-view').navigation;
 
-var vla = `
- adsfahlsdfh asdfhalshf
- 
- `;
+import Cycle from '@cycle/core';
+import CycleDom from '@cycle/dom';
+import { makeDOMDriver, h } from '@cycle/dom';
 
-var foo = function() {
-	console.log(vla);
-	return (() => <h1>hello world, you sly emporeer</h1> )();
+
+//React.render(nav, document.getElementById('mountpoint'));
+
+
+function main(drivers) {
+	return {
+		DOM: drivers.DOM.get('input', 'click')
+			.map(ev => ev.target.checked)
+			.startWith(false)
+			.map(toggled =>
+				h('div', [
+					h('input', { type: 'checkbox'}),
+					'Toggle me',
+					h('p', toggled ? 'ON' : 'off')
+				])
+			)
+	}
+}
+
+let drivers = {
+	DOM: CycleDom.makeDOMDriver('#mountpoint')
 };
 
-foo()
 
-React.render(foo(), document.getElementById('mountpoint'));
+Cycle.run(main, drivers);
+
+
+
