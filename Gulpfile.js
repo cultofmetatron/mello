@@ -5,7 +5,18 @@ var WebpackDevServer = require("webpack-dev-server");
 
 var webpackConfig = {
 	context: __dirname + "/frontend",
-    entry: "./src/scripts/app.js",
+    entry: {
+        app: ["webpack/hot/dev-server", "./src/scripts/app.js"]
+    },
+    module: {
+        loaders: [
+            { 
+                test: /\.js$/, 
+                exclude: /node_modules/, 
+                loader: "babel-loader"
+            }
+        ]
+    },
     output: {
         path: __dirname + "/frontend/build/scripts",
         filename: "app.js"
