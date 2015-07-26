@@ -8,10 +8,6 @@ var webpackConfig = {
     entry: {
         app: ["webpack/hot/dev-server", "./src/scripts/app.js"]
     },
-        contentBase: __dirname + "/frontend/build",
-        noInfo: false, //  --no-info option
-        hot: true,
-        inline: true,
     module: {
         loaders: [
             { 
@@ -24,7 +20,10 @@ var webpackConfig = {
     output: {
         path: __dirname + "/frontend/build/scripts",
         filename: "app.js"
-    }
+    },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin()
+    ]
 }; 
 
 
