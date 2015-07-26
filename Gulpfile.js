@@ -56,3 +56,11 @@ gulp.task("webpack-dev-server", function(callback) {
         // callback();
     });
 });
+
+
+gulp.task("build-dev", ["webpack"], function() {
+	gulp.watch(["frontend/src/**/*.js"], ["webpack"]);
+    gulp.run(['webpack-dev-server']);
+});
+
+
