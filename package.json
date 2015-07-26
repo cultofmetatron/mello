@@ -7,5 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Peter de Croos",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "gulp-util": "^3.0.6",
+    "webpack-dev-server": "^1.10.1"
+  },
+  "devDependencies": {
+    "webpack": "^1.10.5"
+  }
 }
