@@ -14,6 +14,10 @@ var webpackConfig = {
                 test: /\.js$/, 
                 exclude: /node_modules/, 
                 loader: "babel-loader"
+            },
+            { 
+                test: /\.styl$/, 
+                loader: 'style-loader!css-loader!stylus-loader' 
             }
         ]
     },
@@ -58,7 +62,7 @@ gulp.task("webpack-dev-server", function(callback) {
 });
 
 
-gulp.task("build-dev", ["webpack"], function() {
+gulp.task("serve", ["webpack"], function() {
 	gulp.watch(["frontend/src/**/*.js"], ["webpack"]);
     gulp.run(['webpack-dev-server']);
 });

@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "0f1be39d0f0ee600c327"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "de9913c13e57af99a9bf"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -660,17 +660,22 @@
 
 	var React = __webpack_require__(4);
 
+	var vla = '\n adsfahlsdfh asdfhalshf\n \n ';
+
 	var foo = function foo() {
-		return (function () {
-			return React.createElement(
-				'h1',
-				null,
-				'hello world, you sly emporeer'
-			);
-		})();
+	  console.log(vla);
+	  return (function () {
+	    return React.createElement(
+	      'h1',
+	      null,
+	      'hello world, you sly emporeer'
+	    );
+	  })();
 	};
 
 	foo();
+
+	React.render(foo(), document.getElementById('mountpoint'));
 
 /***/ },
 /* 4 */
