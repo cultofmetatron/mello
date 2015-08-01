@@ -4,20 +4,24 @@ var webpack = require("webpack");
 var WebpackDevServer = require("webpack-dev-server");
 
 var webpackConfig = {
-	context: __dirname + "/frontend",
+    context: __dirname + "/frontend",
     entry: {
         app: ["webpack/hot/dev-server", "./src/scripts/app.js"]
     },
     module: {
         loaders: [
-            { 
-                test: /\.js$/, 
-                exclude: /node_modules/, 
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
                 loader: "babel-loader"
             },
-            { 
-                test: /\.styl$/, 
-                loader: 'style-loader!css-loader!stylus-loader' 
+            {
+                test: /\.styl$/,
+                loader: 'style-loader!css-loader!autoprefixer-loader!stylus-loader'
+            },
+            {
+                test: /\.ts$/,
+                loader: 'typescript-loader?typescriptCompiler=jsx-typescript'
             }
         ]
     },
@@ -28,13 +32,13 @@ var webpackConfig = {
     plugins: [
         new webpack.HotModuleReplacementPlugin()
     ]
-}; 
+};
 
 
-gulp.task("webpack", function(callback) {
+gulp.task("webpack", function (callback) {
     // run webpack
-    webpack(webpackConfig, function(err, stats) {
-        if(err) throw new gutil.PluginError("webpack", err);
+    webpack(webpackConfig, function (err, stats) {
+        if (err) throw new gutil.PluginError("webpack", err);
         gutil.log("[webpack]", stats.toString({
             // output options
         }));
@@ -42,7 +46,7 @@ gulp.task("webpack", function(callback) {
     });
 });
 
-gulp.task("webpack-dev-server", function(callback) {
+gulp.task("webpack-dev-server", function (callback) {
     // Start a webpack-dev-server
     var compiler = webpack(webpackConfig);
     new WebpackDevServer(compiler, {
@@ -51,8 +55,8 @@ gulp.task("webpack-dev-server", function(callback) {
         noInfo: false, //  --no-info option
         hot: true,
         inline: true
-    }).listen(8080, "localhost", function(err) {
-        if(err) throw new gutil.PluginError("webpack-dev-server", err);
+    }).listen(8080, "localhost", function (err) {
+        if (err) throw new gutil.PluginError("webpack-dev-server", err);
         // Server listening
         gutil.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/index.html");
 
@@ -62,8 +66,8 @@ gulp.task("webpack-dev-server", function(callback) {
 });
 
 
-gulp.task("serve", ["webpack"], function() {
-	gulp.watch(["frontend/src/**/*.js"], ["webpack"]);
+gulp.task("serve", ["webpack"], function () {
+    gulp.watch(["frontend/src/**/*.js"], ["webpack"]);
     gulp.run(['webpack-dev-server']);
 });
 

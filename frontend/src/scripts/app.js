@@ -1,8 +1,8 @@
 var React = require('react');
-var nav = require('./components/navigation/navigation-view').navigation;
+var nav = require('./components/navigation/navigation-view.js').navigation;
 
 import Cycle from '@cycle/core';
-import CycleDom from '@cycle/dom';
+import CycleDom  from '@cycle/dom';
 import { makeDOMDriver, h } from '@cycle/dom';
 
 
