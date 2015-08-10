@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "63c218172b2c9a6d2ddb"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "1b386d0bdd9b8a495358"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -674,17 +674,31 @@
 	//React.render(nav, document.getElementById('mountpoint'));
 
 	function main(drivers) {
-		return {
-			DOM: drivers.DOM.get('input', 'click').map(function (ev) {
-				return ev.target.checked;
-			}).startWith(false).map(function (toggled) {
-				return (0, _cycleDom.h)('div', [(0, _cycleDom.h)('input', { type: 'checkbox' }), 'Toggle me', (0, _cycleDom.h)('p', toggled ? 'ON' : 'off')]);
-			})
-		};
+	  var clicks$ = drivers.DOM.get('input', 'click');
+
+	  var clicksCount$ = clicks$.map(function (ev) {
+	    return 1;
+	  }).startWith(1).scan(function (x, y) {
+	    return x + y;
+	  });
+
+	  var clicksCountfactor$ = clicksCount$.scan(function (x, y) {
+	    return x * y;
+	  });
+
+	  var toggled$ = clicks$.map(function (ev) {
+	    return ev.target.checked;
+	  }).startWith(false);
+
+	  return {
+	    DOM: _cycleCore.Rx.Observable.combineLatest(toggled$, clicksCount$, clicksCountfactor$, function (checked, count, factor) {
+	      return (0, _cycleDom.h)('div', [(0, _cycleDom.h)('input', { type: 'checkbox' }), 'Toggle me', (0, _cycleDom.h)('p', checked ? 'ON' : 'off'), (0, _cycleDom.h)('p', count + ''), (0, _cycleDom.h)('p', factor + '')]);
+	    })
+	  };
 	}
 
 	var drivers = {
-		DOM: _cycleDom2['default'].makeDOMDriver('#mountpoint')
+	  DOM: (0, _cycleDom.makeDOMDriver)('#mountpoint')
 	};
 
 	_cycleCore2['default'].run(main, drivers);
