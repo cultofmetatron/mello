@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "de99650091fea87fd338"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "8c5c435d21371aea922e"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -676,8 +676,30 @@
 	//represents a form for the todo
 	function todoForm(responses) {
 
-	  var vtree$ = responses.props.getAll().map(function () {
-	    return (0, _cycleDom.h)('form', [(0, _cycleDom.h)('div', [(0, _cycleDom.h)('input', { placeholder: 'Enter a task' })])]);
+	  function getInputs(responses) {
+	    var submissions$ = responses.DOM.get('form.todo', 'submit').map(function (e) {
+	      console.log(e);
+	      e.preventDefault();
+	      return 5;
+	    });
+
+	    var todoText$ = responses.DOM.get('form input.new-todo', 'input').map(function (e) {
+	      return e.target.value;
+	    }).map(function (text) {
+	      return text;
+	    });
+
+	    return todoText$.debounceWithSelector(function () {
+	      return submissions$;
+	    }).map(function (text) {
+	      console.log('hadooken');
+	      return text;
+	    }).startWith("");
+	  }
+
+	  var vtree$ = getInputs(responses) //responses.props.getAll()
+	  .map(function (value) {
+	    return (0, _cycleDom.h)('form.todo', [(0, _cycleDom.h)('div', [(0, _cycleDom.h)('input.new-todo', { placeholder: 'Enter a task' })])]);
 	  });
 
 	  return {

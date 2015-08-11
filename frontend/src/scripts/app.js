@@ -13,12 +13,36 @@ import { makeDOMDriver, h } from '@cycle/dom';
 function todoForm(responses) {
 
   
+  function getInputs(responses) {
+    let submissions$ = responses.DOM.get('form.todo', 'submit')
+    .map((e) => {
+      console.log(e)
+      e.preventDefault();
+      return 5;
+    });
 
-  let vtree$ = responses.props.getAll()
-  .map(() =>
-    h('form', [
+
+    let todoText$ = responses.DOM.get('form input.new-todo', 'input')
+    .map((e) => e.target.value)
+    .map((text) => {
+        return text;
+    });
+    
+
+    return todoText$.debounceWithSelector(() => submissions$)
+      .map((text) => {
+        console.log('hadooken')
+        return text;
+      })
+      .startWith("")
+
+  }
+
+  let vtree$ = getInputs(responses)  //responses.props.getAll()
+  .map((value) =>
+    h('form.todo', [
       h('div', [
-        h('input', { placeholder: 'Enter a task'})
+        h('input.new-todo', { placeholder: 'Enter a task'})
       ])
     ]));
    
