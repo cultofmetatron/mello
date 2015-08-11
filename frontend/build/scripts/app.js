@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "1b386d0bdd9b8a495358"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "de99650091fea87fd338"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -673,6 +673,18 @@
 
 	//React.render(nav, document.getElementById('mountpoint'));
 
+	//represents a form for the todo
+	function todoForm(responses) {
+
+	  var vtree$ = responses.props.getAll().map(function () {
+	    return (0, _cycleDom.h)('form', [(0, _cycleDom.h)('div', [(0, _cycleDom.h)('input', { placeholder: 'Enter a task' })])]);
+	  });
+
+	  return {
+	    DOM: vtree$
+	  };
+	}
+
 	function main(drivers) {
 	  var clicks$ = drivers.DOM.get('input', 'click');
 
@@ -692,13 +704,15 @@
 
 	  return {
 	    DOM: _cycleCore.Rx.Observable.combineLatest(toggled$, clicksCount$, clicksCountfactor$, function (checked, count, factor) {
-	      return (0, _cycleDom.h)('div', [(0, _cycleDom.h)('input', { type: 'checkbox' }), 'Toggle me', (0, _cycleDom.h)('p', checked ? 'ON' : 'off'), (0, _cycleDom.h)('p', count + ''), (0, _cycleDom.h)('p', factor + '')]);
+	      return (0, _cycleDom.h)('div', [(0, _cycleDom.h)('input', { type: 'checkbox' }), (0, _cycleDom.h)('todo-form'), 'Toggle me', (0, _cycleDom.h)('p', checked ? 'ON' : 'off'), (0, _cycleDom.h)('p', count + ''), (0, _cycleDom.h)('p', factor + '')]);
 	    })
 	  };
 	}
 
 	var drivers = {
-	  DOM: (0, _cycleDom.makeDOMDriver)('#mountpoint')
+	  DOM: (0, _cycleDom.makeDOMDriver)('#mountpoint', {
+	    'todo-form': todoForm
+	  })
 	};
 
 	_cycleCore2['default'].run(main, drivers);
