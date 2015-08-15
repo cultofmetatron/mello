@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "8c5c435d21371aea922e"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "ca4e298973c8966ffcc8"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -677,10 +677,9 @@
 	function todoForm(responses) {
 
 	  function getInputs(responses) {
-	    var submissions$ = responses.DOM.get('form.todo', 'submit').map(function (e) {
+	    var submissions$ = responses.DOM.get('form.todo', 'mouseenter').doOnNext(function (e) {
 	      console.log(e);
 	      e.preventDefault();
-	      return 5;
 	    });
 
 	    var todoText$ = responses.DOM.get('form input.new-todo', 'input').map(function (e) {
@@ -699,7 +698,9 @@
 
 	  var vtree$ = getInputs(responses) //responses.props.getAll()
 	  .map(function (value) {
-	    return (0, _cycleDom.h)('form.todo', [(0, _cycleDom.h)('div', [(0, _cycleDom.h)('input.new-todo', { placeholder: 'Enter a task' })])]);
+	    return (0, _cycleDom.h)('form.todo', {
+	      onsubmit: 'inputSubmits$'
+	    }, [(0, _cycleDom.h)('div', [(0, _cycleDom.h)('input.new-todo', { placeholder: 'Enter a task' })])]);
 	  });
 
 	  return {
@@ -708,7 +709,7 @@
 	}
 
 	function main(drivers) {
-	  var clicks$ = drivers.DOM.get('input', 'click');
+	  var clicks$ = drivers.DOM.get('input.checky', 'click');
 
 	  var clicksCount$ = clicks$.map(function (ev) {
 	    return 1;
@@ -726,7 +727,7 @@
 
 	  return {
 	    DOM: _cycleCore.Rx.Observable.combineLatest(toggled$, clicksCount$, clicksCountfactor$, function (checked, count, factor) {
-	      return (0, _cycleDom.h)('div', [(0, _cycleDom.h)('input', { type: 'checkbox' }), (0, _cycleDom.h)('todo-form'), 'Toggle me', (0, _cycleDom.h)('p', checked ? 'ON' : 'off'), (0, _cycleDom.h)('p', count + ''), (0, _cycleDom.h)('p', factor + '')]);
+	      return (0, _cycleDom.h)('div', [(0, _cycleDom.h)('input.checky', { type: 'checkbox' }), (0, _cycleDom.h)('todo-form'), 'Toggle me', (0, _cycleDom.h)('p', checked ? 'ON' : 'off'), (0, _cycleDom.h)('p', count + ''), (0, _cycleDom.h)('p', factor + '')]);
 	    })
 	  };
 	}

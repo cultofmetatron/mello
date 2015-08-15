@@ -14,20 +14,17 @@ function todoForm(responses) {
 
   
   function getInputs(responses) {
-    let submissions$ = responses.DOM.get('form.todo', 'submit')
-    .map((e) => {
-      console.log(e)
+    let submissions$ = responses.DOM.get('form.todo', 'mouseenter')
+    .doOnNext((e) => {
+      console.log(e);
       e.preventDefault();
-      return 5;
     });
-
 
     let todoText$ = responses.DOM.get('form input.new-todo', 'input')
     .map((e) => e.target.value)
     .map((text) => {
         return text;
     });
-    
 
     return todoText$.debounceWithSelector(() => submissions$)
       .map((text) => {
@@ -40,7 +37,9 @@ function todoForm(responses) {
 
   let vtree$ = getInputs(responses)  //responses.props.getAll()
   .map((value) =>
-    h('form.todo', [
+    h('form.todo', {
+      onsubmit: 'inputSubmits$'
+    }, [
       h('div', [
         h('input.new-todo', { placeholder: 'Enter a task'})
       ])
@@ -54,7 +53,7 @@ function todoForm(responses) {
 
 
 function main(drivers) {
-  let clicks$ = drivers.DOM.get('input', 'click');
+  let clicks$ = drivers.DOM.get('input.checky', 'click');
 
   let clicksCount$ = clicks$
     .map(ev => 1)
@@ -75,7 +74,7 @@ function main(drivers) {
       clicksCountfactor$,
       (checked, count, factor) => {
         return h('div', [
-          h('input', { type: 'checkbox'}),
+          h('input.checky', { type: 'checkbox'}),
           h('todo-form'),
           'Toggle me',
           h('p', checked ? 'ON' : 'off'),
