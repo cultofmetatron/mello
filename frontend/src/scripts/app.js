@@ -56,7 +56,10 @@ function todoForm(responses) {
            
           }, [
             h('div', [
-              h('input.new-todo', { placeholder: 'Enter a task'})
+              h('input.new-todo', {
+                value: "",
+                placeholder: 'Enter a task'
+              })
             ])
           ])
         ]));

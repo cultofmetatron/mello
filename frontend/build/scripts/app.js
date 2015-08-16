@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "2ad45b5e4ca5e8d82000"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "e5b760313c206d0f8154"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -715,7 +715,10 @@
 
 	  function view(state$) {
 	    return state$.map(function (state) {
-	      return (0, _cycleDom.h)('div', [(0, _cycleDom.h)('form.todo', {}, [(0, _cycleDom.h)('div', [(0, _cycleDom.h)('input.new-todo', { placeholder: 'Enter a task' })])])]);
+	      return (0, _cycleDom.h)('div', [(0, _cycleDom.h)('form.todo', {}, [(0, _cycleDom.h)('div', [(0, _cycleDom.h)('input.new-todo', {
+	        value: "",
+	        placeholder: 'Enter a task'
+	      })])])]);
 	    });
 	  }
 
