@@ -15,6 +15,11 @@ function todoForm(responses) {
 
   function intent(DOM) {
     let submissions$ = DOM.get('form.todo', 'submit')
+      .map((ev) => {
+        console.log(responses.props);
+        console.log(ev.detail);
+        return ev;
+      })
       .map(ev => {
         if (ev) {
           ev.preventDefault();
@@ -107,7 +112,10 @@ function main(drivers) {
       (checked, count, factor) => {
         return h('div', [
           h('input.checky', { type: 'checkbox'}),
-          h('todo-form'),
+          h('todo-form', {
+            key: 1,
+            stuff: "sadie hawkins"
+          }),
           'Toggle me',
           h('p', checked ? 'ON' : 'off'),
           h('p', count + ''),
