@@ -20,8 +20,7 @@ function todoForm(responses) {
         if (ev) {
           ev.preventDefault();
         }
-        console.log('entering');
-        return ev
+        return ev;
       })
 
 
@@ -31,8 +30,8 @@ function todoForm(responses) {
         return text;
     });
 
-    return todoText$.debounceWithSelector(() => submissions$)
-      .doOnNext(text => console.log(text))
+    return Rx.Observable.combineLatest(submissions$, todoText$.debounceWithSelector(() => submissions$),(submission, text) => text)
+      .doOnNext(text => console.log('submitted: ', text))
       .startWith("")
   }
 

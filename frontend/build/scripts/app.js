@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "9e53591b5365b5aa6d5d"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "82ecfbbd2e5df2693e5a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -682,7 +682,6 @@
 	      if (ev) {
 	        ev.preventDefault();
 	      }
-	      console.log('entering');
 	      return ev;
 	    });
 
@@ -692,10 +691,12 @@
 	      return text;
 	    });
 
-	    return todoText$.debounceWithSelector(function () {
+	    return _cycleCore.Rx.Observable.combineLatest(submissions$, todoText$.debounceWithSelector(function () {
 	      return submissions$;
+	    }), function (submission, text) {
+	      return text;
 	    }).doOnNext(function (text) {
-	      return console.log(text);
+	      return console.log('submitted: ', text);
 	    }).startWith("");
 	  }
 
