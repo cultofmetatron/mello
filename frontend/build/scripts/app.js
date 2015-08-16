@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "82ecfbbd2e5df2693e5a"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "2ad45b5e4ca5e8d82000"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -676,9 +676,8 @@
 	//represents a form for the todo
 	function todoForm(responses) {
 
-	  function getInputs(responses) {
-
-	    var submissions$ = responses.DOM.get('form.todo', 'submit').map(function (ev) {
+	  function intent(DOM) {
+	    var submissions$ = DOM.get('form.todo', 'submit').map(function (ev) {
 	      if (ev) {
 	        ev.preventDefault();
 	      }
@@ -691,23 +690,39 @@
 	      return text;
 	    });
 
-	    return _cycleCore.Rx.Observable.combineLatest(submissions$, todoText$.debounceWithSelector(function () {
-	      return submissions$;
-	    }), function (submission, text) {
-	      return text;
-	    }).doOnNext(function (text) {
-	      return console.log('submitted: ', text);
-	    }).startWith("");
+	    return {
+	      inputStream$: _cycleCore.Rx.Observable.combineLatest(submissions$, todoText$.debounceWithSelector(function () {
+	        return submissions$;
+	      }), function (submission, text) {
+	        return text;
+	      }).doOnNext(function (text) {
+	        return console.log('submitted: ', text);
+	      }).startWith("")
+	    };
 	  }
 
-	  var vtree$ = getInputs(responses) //responses.props.getAll()
-	  .map(function (value) {
-	    return (0, _cycleDom.h)('div', [(0, _cycleDom.h)('form.todo', {}, [(0, _cycleDom.h)('div', [(0, _cycleDom.h)('input.new-todo', { placeholder: 'Enter a task' })])])]);
-	  });
+	  function model(context, actions) {
+	    return actions.inputStream$.map(function (text) {
+	      return {
+	        props: context.props,
+	        newTodo: {
+	          text: text,
+	          createdAt: new Date()
+	        }
+	      };
+	    });
+	  }
+
+	  function view(state$) {
+	    return state$.map(function (state) {
+	      return (0, _cycleDom.h)('div', [(0, _cycleDom.h)('form.todo', {}, [(0, _cycleDom.h)('div', [(0, _cycleDom.h)('input.new-todo', { placeholder: 'Enter a task' })])])]);
+	    });
+	  }
+
+	  //let vtree$ = getInputs(responses)  //responses.props.getAll()
 
 	  return {
-	    DOM: vtree$
-	    //submissions$: responses.DOM.get('form', 'submit')
+	    DOM: view(model(responses, intent(responses.DOM)))
 	  };
 	}
 

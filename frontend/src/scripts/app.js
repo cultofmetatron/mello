@@ -13,44 +13,61 @@ import { makeDOMDriver, h } from '@cycle/dom';
 function todoForm(responses) {
 
 
-  function getInputs(responses) {
-
-    let submissions$ = responses.DOM.get('form.todo', 'submit')
+  function intent(DOM) {
+    let submissions$ = DOM.get('form.todo', 'submit')
       .map(ev => {
         if (ev) {
           ev.preventDefault();
         }
         return ev;
-      })
-
+      });
 
     let todoText$ = responses.DOM.get('form.todo input.new-todo', 'input')
-    .map((e) => e.target.value)
-    .map((text) => {
-        return text;
-    });
+      .map((e) => e.target.value)
+      .map((text) => {
+          return text;
+      });
 
-    return Rx.Observable.combineLatest(submissions$, todoText$.debounceWithSelector(() => submissions$),(submission, text) => text)
-      .doOnNext(text => console.log('submitted: ', text))
-      .startWith("")
+    return {
+      inputStream$: Rx.Observable.combineLatest(submissions$, todoText$.debounceWithSelector(() => submissions$),(submission, text) => text)
+        .doOnNext(text => console.log('submitted: ', text))
+        .startWith("")
+    };
   }
 
-  let vtree$ = getInputs(responses)  //responses.props.getAll()
-  .map((value) =>
-    h('div', [
-      h('form.todo', {
-       
-      }, [
+  function model(context, actions) {
+    return actions.inputStream$
+      .map((text) => {
+        return {
+          props: context.props,
+          newTodo: {
+            text: text,
+            createdAt: new Date()
+          }
+        };
+      });
+  }
+
+  function view(state$) {
+    return state$
+      .map((state) =>
         h('div', [
-          h('input.new-todo', { placeholder: 'Enter a task'})
-        ])
-      ])
-    ]));
-   
+          h('form.todo', {
+           
+          }, [
+            h('div', [
+              h('input.new-todo', { placeholder: 'Enter a task'})
+            ])
+          ])
+        ]));
+  }
+
+  
+  //let vtree$ = getInputs(responses)  //responses.props.getAll()
+     
   return {
-    DOM: vtree$
-    //submissions$: responses.DOM.get('form', 'submit')
-  };
+    DOM: view(model(responses, intent(responses.DOM)))
+  }
 }
 
 
