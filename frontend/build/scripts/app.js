@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "5dd28c437831fb8a9b4c"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "9e53591b5365b5aa6d5d"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -678,7 +678,6 @@
 
 	  function getInputs(responses) {
 
-	    debugger;
 	    var submissions$ = responses.DOM.get('form.todo', 'submit').map(function (ev) {
 	      if (ev) {
 	        ev.preventDefault();
@@ -692,9 +691,9 @@
 	    }).map(function (text) {
 	      return text;
 	    });
-	    //     Rx.Observable.combineLatest
-	    return _cycleCore.Rx.Observable.combineLatest(submissions$, todoText$, function (submission, text) {
-	      return text;
+
+	    return todoText$.debounceWithSelector(function () {
+	      return submissions$;
 	    }).doOnNext(function (text) {
 	      return console.log(text);
 	    }).startWith("");

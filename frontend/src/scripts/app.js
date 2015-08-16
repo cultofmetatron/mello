@@ -15,7 +15,6 @@ function todoForm(responses) {
 
   function getInputs(responses) {
 
-    debugger
     let submissions$ = responses.DOM.get('form.todo', 'submit')
       .map(ev => {
         if (ev) {
@@ -31,8 +30,8 @@ function todoForm(responses) {
     .map((text) => {
         return text;
     });
-    //     Rx.Observable.combineLatest
-    return Rx.Observable.combineLatest(submissions$, todoText$, (submission, text) => text)
+
+    return todoText$.debounceWithSelector(() => submissions$)
       .doOnNext(text => console.log(text))
       .startWith("")
   }
