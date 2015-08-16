@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "ca4e298973c8966ffcc8"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "5dd28c437831fb8a9b4c"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -677,38 +677,50 @@
 	function todoForm(responses) {
 
 	  function getInputs(responses) {
-	    var submissions$ = responses.DOM.get('form.todo', 'mouseenter').doOnNext(function (e) {
-	      console.log(e);
-	      e.preventDefault();
+
+	    debugger;
+	    var submissions$ = responses.DOM.get('form.todo', 'submit').map(function (ev) {
+	      if (ev) {
+	        ev.preventDefault();
+	      }
+	      console.log('entering');
+	      return ev;
 	    });
 
-	    var todoText$ = responses.DOM.get('form input.new-todo', 'input').map(function (e) {
+	    var todoText$ = responses.DOM.get('form.todo input.new-todo', 'input').map(function (e) {
 	      return e.target.value;
 	    }).map(function (text) {
 	      return text;
 	    });
-
-	    return todoText$.debounceWithSelector(function () {
-	      return submissions$;
-	    }).map(function (text) {
-	      console.log('hadooken');
+	    //     Rx.Observable.combineLatest
+	    return _cycleCore.Rx.Observable.combineLatest(submissions$, todoText$, function (submission, text) {
 	      return text;
+	    }).doOnNext(function (text) {
+	      return console.log(text);
 	    }).startWith("");
 	  }
 
 	  var vtree$ = getInputs(responses) //responses.props.getAll()
 	  .map(function (value) {
-	    return (0, _cycleDom.h)('form.todo', {
-	      onsubmit: 'inputSubmits$'
-	    }, [(0, _cycleDom.h)('div', [(0, _cycleDom.h)('input.new-todo', { placeholder: 'Enter a task' })])]);
+	    return (0, _cycleDom.h)('div', [(0, _cycleDom.h)('form.todo', {}, [(0, _cycleDom.h)('div', [(0, _cycleDom.h)('input.new-todo', { placeholder: 'Enter a task' })])])]);
 	  });
 
 	  return {
 	    DOM: vtree$
+	    //submissions$: responses.DOM.get('form', 'submit')
 	  };
 	}
 
 	function main(drivers) {
+
+	  /*
+	  drivers.DOM.get('form.todo', 'submit')
+	    .forEach(ev => {
+	      console.log('hello nurse');
+	      ev.preventDefault()
+	    })
+	  */
+
 	  var clicks$ = drivers.DOM.get('input.checky', 'click');
 
 	  var clicksCount$ = clicks$.map(function (ev) {
